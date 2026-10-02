@@ -2,39 +2,39 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_TARGET="$SCRIPT_DIR/assessment-repository"
-TARGET="${1:-$DEFAULT_TARGET}"
+REPO="${1:-$SCRIPT_DIR/assessment-repository}"
 
-if [[ ! -d "$TARGET/.git" ]]; then
-  echo "Usage: ./prepare-recovery-test.sh [path-to-learner-repository]"
+if [[ ! -d "$REPO/.git" ]]; then
+  echo "Usage: $0 [path-to-assessment-repository]" >&2
   exit 1
 fi
 
-cd "$TARGET"
-BRANCH="$(git branch --show-current)"
+if [[ -n "$(git -C "$REPO" status --porcelain)" ]]; then
+  echo "Learner repository is not clean. Do not introduce the recovery incident until it is clean." >&2
+  exit 1
+fi
+
+BRANCH="$(git -C "$REPO" branch --show-current)"
 if [[ -z "$BRANCH" ]]; then
-  echo "The learner repository is not on a normal branch. Stop and inspect it first."
+  echo "Could not determine the current branch." >&2
   exit 1
 fi
 
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "The learner has uncommitted changes. Do not prepare the recovery test until the working tree is clean."
+FILE="$REPO/docs/incident-response.md"
+MARKER="\n## Temporary escalation note\n\nDuring an escalation, record the person who accepted the escalation and the next verification point.\n"
+
+if grep -q "Temporary escalation note" "$FILE"; then
+  echo "Recovery test content already exists in $FILE. Refusing to run twice." >&2
   exit 1
 fi
 
-cat >> docs/incident-response.md <<'RECOVERY_EOF'
+printf "%b" "$MARKER" >> "$FILE"
+git -C "$REPO" add docs/incident-response.md
+git -C "$REPO" commit -m "docs: add temporary escalation note" >/dev/null
+RECOVERY_COMMIT="$(git -C "$REPO" rev-parse HEAD)"
+git -C "$REPO" reset --hard HEAD~1 >/dev/null
 
-## Temporary escalation note
-
-For a confirmed P1 incident, the Service Desk should identify an incident owner immediately and record the first escalation action.
-RECOVERY_EOF
-
-git add docs/incident-response.md
-git commit -m 'docs: add temporary escalation note' >/dev/null
-TEMP_COMMIT="$(git rev-parse HEAD)"
-git reset --hard HEAD~1 >/dev/null
-
-echo "Recovery test prepared for branch: $BRANCH"
-echo "The useful commit was deliberately removed from the branch tip."
-echo "The commit id is intentionally not shown to the learner."
-echo "Instructor reference: $TEMP_COMMIT"
+echo "Recovery incident prepared on branch: $BRANCH"
+echo "The useful commit is no longer at the branch tip."
+echo "INSTRUCTOR ONLY — recovery commit: $RECOVERY_COMMIT"
+echo "Ask the learner to investigate and recover the missing work."

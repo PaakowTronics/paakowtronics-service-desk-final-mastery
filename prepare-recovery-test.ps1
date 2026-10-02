@@ -1,35 +1,29 @@
-$ErrorActionPreference = 'Stop'
+param(
+    [string]$Repo = ""
+)
+$ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Target = if ($args.Count -gt 0) { $args[0] } else { Join-Path $ScriptDir 'assessment-repository' }
+if ([string]::IsNullOrWhiteSpace($Repo)) { $Repo = Join-Path $ScriptDir "assessment-repository" }
 
-if (-not (Test-Path (Join-Path $Target '.git'))) {
-    Write-Error 'Usage: .\prepare-recovery-test.ps1 [path-to-learner-repository]'
-}
+if (-not (Test-Path (Join-Path $Repo ".git"))) { throw "Usage: .\prepare-recovery-test.ps1 [path-to-assessment-repository]" }
 
-Set-Location $Target
-$Branch = (git branch --show-current).Trim()
-if ([string]::IsNullOrWhiteSpace($Branch)) {
-    Write-Error 'The learner repository is not on a normal branch. Stop and inspect it first.'
-}
+$Status = git -C $Repo status --porcelain
+if (-not [string]::IsNullOrWhiteSpace(($Status -join "`n"))) { throw "Learner repository is not clean. Do not introduce the recovery incident until it is clean." }
 
-$Status = git status --porcelain
-if ($Status) {
-    Write-Error 'The learner has uncommitted changes. Do not prepare the recovery test until the working tree is clean.'
-}
+$Branch = git -C $Repo branch --show-current
+if ([string]::IsNullOrWhiteSpace($Branch)) { throw "Could not determine the current branch." }
 
-Add-Content -Path 'docs/incident-response.md' -Value @'
+$File = Join-Path $Repo "docs/incident-response.md"
+$Content = Get-Content $File -Raw
+if ($Content -match "Temporary escalation note") { throw "Recovery test content already exists. Refusing to run twice." }
 
-## Temporary escalation note
+Add-Content -Path $File -Value "`r`n## Temporary escalation note`r`n`r`nDuring an escalation, record the person who accepted the escalation and the next verification point.`r`n"
+git -C $Repo add docs/incident-response.md
+git -C $Repo commit -m "docs: add temporary escalation note" | Out-Null
+$RecoveryCommit = git -C $Repo rev-parse HEAD
+git -C $Repo reset --hard HEAD~1 | Out-Null
 
-For a confirmed P1 incident, the Service Desk should identify an incident owner immediately and record the first escalation action.
-'@
-
-git add docs/incident-response.md
-git commit -m 'docs: add temporary escalation note' | Out-Null
-$TempCommit = (git rev-parse HEAD).Trim()
-git reset --hard HEAD~1 | Out-Null
-
-Write-Host "Recovery test prepared for branch: $Branch"
-Write-Host 'The useful commit was deliberately removed from the branch tip.'
-Write-Host 'The commit id is intentionally not shown to the learner.'
-Write-Host "Instructor reference: $TempCommit"
+Write-Host "Recovery incident prepared on branch: $Branch"
+Write-Host "The useful commit is no longer at the branch tip."
+Write-Host "INSTRUCTOR ONLY — recovery commit: $RecoveryCommit"
+Write-Host "Ask the learner to investigate and recover the missing work."

@@ -1,35 +1,35 @@
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = "Stop"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Bundle = Join-Path $ScriptDir 'starter-remote.bundle'
-$Remote = Join-Path $ScriptDir 'starter-remote.git'
-$Target = Join-Path $ScriptDir 'assessment-repository'
+$Bundle = Join-Path $ScriptDir "starter-remote.bundle"
+$Remote = Join-Path $ScriptDir "starter-remote.git"
+$Repo = Join-Path $ScriptDir "assessment-repository"
 
-if (-not (Test-Path $Bundle -PathType Leaf)) {
-    Write-Error 'starter-remote.bundle was not found.'
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    throw "Git is required but was not found in PATH."
+}
+if (-not (Test-Path $Bundle)) {
+    throw "Missing starter-remote.bundle"
+}
+if (Test-Path $Repo) {
+    throw "assessment-repository already exists. Use .\reset.ps1 for a fresh assessment."
 }
 
-if (Test-Path $Target) {
-    Write-Error 'assessment-repository already exists. Use .\reset.ps1 if you want a clean copy.'
+if (Test-Path $Remote) {
+    Remove-Item -Recurse -Force $Remote
 }
 
-if (-not (Test-Path $Remote)) {
-    Write-Host 'Preparing the assessment Git repository from starter-remote.bundle...'
-    git clone --bare $Bundle $Remote
-}
+Write-Host "Creating clean assessment remote..."
+git -c init.defaultBranch=main clone --bare $Bundle $Remote
 
-git clone $Remote $Target
-Set-Location $Target
+Write-Host "Creating learner repository..."
+git clone $Remote $Repo
 
-git config user.name 'Git Essentials Learner'
-git config user.email 'learner@training.invalid'
+$UserName = git -C $Repo config user.name 2>$null
+if ([string]::IsNullOrWhiteSpace($UserName)) { git -C $Repo config user.name "Assessment Learner" }
+$UserEmail = git -C $Repo config user.email 2>$null
+if ([string]::IsNullOrWhiteSpace($UserEmail)) { git -C $Repo config user.email "learner@example.invalid" }
 
-Write-Host ''
-Write-Host 'Assessment repository created:'
-Write-Host "  $Target"
-Write-Host ''
-Write-Host 'Starting branch:'
-git branch --show-current
-Write-Host ''
-Write-Host 'Remote:'
-git remote -v
+Write-Host ""
+Write-Host "Assessment ready: $Repo"
+Write-Host "The learner starts on local main with a clean working tree."

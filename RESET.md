@@ -1,32 +1,25 @@
 # Resetting the PaakowTronics Service Desk Assessment
 
-## Why Reset?
-
 The assessment is designed to be reusable.
 
-After one learner completes it, you can create a fresh copy for another learner.
-
-The reset process recreates the learner repository from the bundled clean assessment remote.
-
----
-
-# Before Resetting
-
-Make sure the learner's assessment is no longer needed.
-
-The reset process deletes the package's generated:
+A reset removes only the generated assessment state:
 
 ```text
 assessment-repository/
+starter-remote.git/
 ```
 
-It does not delete `starter-remote.git`.
+It does **not** modify or recreate `starter-remote.bundle`.
 
-Do not place unrelated work inside `assessment-repository`.
+The bundle is the clean source of truth.
 
----
+## Before resetting
 
-# Reset on Linux, macOS or Git Bash
+Make sure the current learner's work is no longer needed. The reset is destructive to the generated learner repository.
+
+Do not place unrelated files inside `assessment-repository/`.
+
+## Git Bash / Linux / macOS
 
 From the `final-mastery` directory:
 
@@ -34,9 +27,7 @@ From the `final-mastery` directory:
 ./reset.sh
 ```
 
----
-
-# Reset on PowerShell
+## PowerShell
 
 From the `final-mastery` directory:
 
@@ -44,16 +35,12 @@ From the `final-mastery` directory:
 .\reset.ps1
 ```
 
----
+## Verify
 
-# Verify the Reset
+After the reset, the generated repository should:
 
-After resetting, enter:
-
-```text
-assessment-repository/
-```
-
-and confirm that the repository is back at the original clean starting state.
-
-The learner should again see the prepared remote branches and the original history.
+- be on local `main`;
+- have a clean working tree;
+- point `origin` at the newly generated local bare remote;
+- show the prepared remote-tracking branches;
+- contain the original baseline documentation without learner changes.

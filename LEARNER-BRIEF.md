@@ -1,293 +1,223 @@
 # Git Essentials — Final Mastery Challenge
 
-# PaakowTronics Service Desk
-
-## Purpose
+## PaakowTronics Service Desk
 
 This is the final practical assessment for Git Essentials.
 
-You are now working with a small repository used by the fictional **PaakowTronics Service Desk**.
+You are working as a support engineer in a fictional PaakowTronics Service Desk repository. Your job is not to demonstrate that you remember Git commands. Your job is to demonstrate that you can **investigate a repository, make a safe change, integrate other people's work, recover from a mistake and prove the final state**.
 
-The repository contains service-desk policies, ticket records and knowledge-base procedures.
-
-This is intentionally different from the lessons.
-
-You are **not** given a command-by-command recipe.
-
-Your job is to investigate, plan, act, verify and recover.
-
----
-
-# Your Rules
+## Rules
 
 You may use:
 
-- the repository README;
-- the documentation contained in the repository;
+- the repository documentation;
 - Git's built-in help;
 - official Git documentation;
 - normal terminal documentation;
 - your Git Essentials course notes;
 - your own previous work.
 
-You may not ask the instructor:
+You may ask the instructor to clarify the **business requirement**. You should not ask:
 
-> “What exact command should I type?”
+> “What exact Git command should I type?”
 
-You may ask for clarification about the **business requirement** or what a task is asking you to achieve.
+If you do not remember Git syntax, look it up. That is part of the assessment.
 
-If you do not know the exact Git syntax, find it.
-
-That is part of the assessment.
+There is more than one valid way to solve several parts of this assessment. Your explanation and the resulting repository state matter.
 
 ---
 
-# Your Starting Situation
+# Mission 1 — Establish the Situation
 
-You have been given a copy of the **PaakowTronics Service Desk** repository.
-
-The Service Desk is standardising its support procedures.
-
-Several pieces of work have been developed independently by different support staff.
-
-Some work is ready to integrate.
-
-Some work needs review.
-
-One part of the work will deliberately require you to investigate a conflict.
-
-Later, you will be given a recovery problem.
-
-The repository is real Git data prepared specifically for this assessment. You do not need to invent the branches, commits or history yourself.
-
----
-
-# Mission 1 — Orient Yourself
+You have just joined the Service Desk team and have been given the repository.
 
 **Do not change anything yet.**
 
-Determine:
+Establish the repository's current situation. Find out:
 
 - where you are;
-- whether you are inside a Git repository;
-- the current branch;
-- the repository status;
-- recent history;
-- available branches;
-- configured remotes.
+- whether this is a Git repository;
+- what branch you are on;
+- whether the working tree is clean;
+- what recent history looks like;
+- what other branches or branch references are available;
+- what remote repository is configured.
 
-Then explain, in your own words, what you discovered.
+Write a short note for yourself describing what you found.
 
-Do not continue until you understand the starting state.
+Do not assume that a branch name tells you everything about its contents.
 
 ---
 
-# Mission 2 — Understand the Service Desk
+# Mission 2 — Understand Before Editing
 
-Read the repository `README.md` and the relevant documents under `docs/`.
+Read the repository documentation before changing it.
 
 Determine:
 
-- what the repository is used for;
-- how the files are organised;
-- how ticket priority works;
-- what the service-desk policy says about documentation and escalation;
-- what sort of change would be appropriate for this repository.
+- what the repository is for;
+- how the documentation and tickets are organised;
+- how priority is currently defined;
+- what the service-desk policy says about priority and escalation;
+- what a normal documentation change should look like in this repository.
 
-You are not being assessed on your ability to invent business rules.
-
-You are being assessed on your ability to **read the existing project before changing it**.
+You are being assessed on whether you can understand an existing project before making changes to it.
 
 ---
 
-# Mission 3 — Service Desk Change Request
+# Mission 3 — Manager's Policy Request
 
-The Service Desk manager has requested the following policy clarification:
+The Service Desk manager has asked for this clarification:
 
-> **Priority P2 should clearly cover a major internal team being blocked from an important function and a significant degradation of a customer-facing service. The policy should also make clear that priority is based on business impact rather than the identity of the person who submitted the ticket.**
+> **P2 should clearly cover a major internal team being blocked from an important function and a significant degradation of a customer-facing service. Priority must be based on business impact rather than the identity or job title of the person who submitted the ticket.**
 
-You must implement this change in the repository.
+Implement the request.
 
-Before committing:
+Do not work directly on the long-lived baseline branch. Create an appropriate isolated line of work yourself.
 
-- inspect what you changed;
-- inspect repository status;
-- review the diff;
-- make sure you have not changed unrelated files.
+Before committing, inspect what you changed and make sure unrelated files have not been modified.
 
-Create a meaningful commit.
+Create a meaningful commit that explains the change.
 
-Choose an appropriate branch name yourself.
-
-Do not ask the instructor what branch name to use.
+Do not ask the instructor what branch name or commit message to use.
 
 ---
 
-# Mission 4 — Investigate Other Work
+# Mission 4 — Investigate the Work of Other Staff
 
-There are other branches in the repository.
+You have been told that several other support staff have already worked on the repository.
 
-Before integrating anything, investigate them.
+Investigate the available branch history.
 
-Determine:
+For each branch that appears relevant, determine:
 
-- what each relevant branch is for;
-- which commits introduced its changes;
-- which work is related to the Service Desk request;
-- which work should be brought into your final result;
+- what problem the branch was trying to solve;
+- which commits introduced the work;
+- which files changed;
+- whether the work is useful to the manager's request;
+- whether any part of the work is questionable or inconsistent with the existing policy;
 - which work should remain separate.
 
-Do not integrate blindly.
+Do not merge everything simply because it exists.
 
-Use the repository history as evidence.
+Your investigation should give you enough evidence to decide what should and should not enter your final result.
 
 ---
 
-# Mission 5 — Bring the Work Together
+# Mission 5 — Integrate the Appropriate Work
 
-The Service Desk needs the relevant approved documentation changes brought together.
+The Service Desk wants the relevant customer-portal documentation included in the final result, but it does **not** want an incorrect policy rule simply because it was committed by another team member.
 
-Integrate the appropriate work into your branch.
+Bring together the work that belongs in the final result.
 
-One of the branches contains a change in the same area you have modified.
+Your own policy change overlaps with work in the customer-portal history. A conflict is expected if you integrate the histories in a suitable way.
 
-A conflict may occur.
+If a conflict occurs:
 
-If it does:
-
-1. inspect the conflict;
+1. inspect what Git is telling you;
 2. understand both versions;
-3. decide what the final policy should say based on the business requirement and existing documentation;
-4. resolve the conflict intentionally;
-5. inspect the result;
-6. complete the integration;
-7. verify the resulting history.
+3. compare them with the business requirement and the existing project policy;
+4. keep the correct business meaning;
+5. remove contradictory or duplicate policy language;
+6. finish the integration deliberately;
+7. inspect the resulting history and files.
 
-Do not simply choose one side because Git gives you a button or command for doing so.
+Do not resolve a conflict by automatically choosing one side.
 
----
-
-# Mission 6 — Recovery Test
-
-At this stage, the instructor will deliberately introduce a recovery problem into your local repository.
-
-You will be told only that:
-
-> **A useful piece of work appears to have disappeared from the branch. Find out what happened and recover it without guessing.**
-
-You should investigate using the repository's evidence.
-
-Possible evidence includes:
-
-```text
-status
-history
-log
-diff
-reflog
-```
-
-Do not immediately run a destructive reset.
-
-First determine what happened.
-
-Your recovery method must preserve the work that should remain.
+A successful result is more important than following one prescribed command sequence.
 
 ---
 
-# Mission 7 — Remote Awareness
+# Mission 6 — Recovery Incident
 
-The repository has a remote named `origin`.
+Stop here and call the instructor.
+
+The instructor will deliberately introduce a small incident into your local repository.
+
+You will be told only this:
+
+> **A useful piece of work was visible earlier, but it now appears to have disappeared from the current branch. Find out what happened and recover it without guessing.**
+
+Investigate the evidence available in the repository.
+
+Do not immediately perform another destructive operation.
+
+Your goal is to determine:
+
+- what changed;
+- what happened to the work;
+- whether the work can still be found;
+- how to restore the useful change without destroying the work you already completed.
+
+After recovery, verify the resulting files and history.
+
+---
+
+# Mission 7 — Understand the Remote
+
+The repository has a configured remote.
 
 Determine:
 
 - what the remote represents;
 - where it points;
-- what branches exist on the remote;
-- whether your branch tracks a remote branch;
+- what branch information exists there;
+- whether your current branch tracks anything;
 - whether your local information is current;
-- what would happen if you pushed your branch.
+- what would happen if you pushed your completed work.
 
-You may push your completed work to the assessment remote when appropriate.
+You may push your completed work to the assessment remote if appropriate.
 
-Do not push destructive changes merely to prove that you can push.
+Do not push destructive changes simply to prove that you can push.
 
 ---
 
-# Mission 8 — Final Verification
+# Mission 8 — Focused Change Request
 
-Before declaring the assessment complete, verify:
+Management now asks for one specific item from the portal hotfix work:
+
+> **Bring the portal incident ticket into your completed line of work. Do not bring the rest of the portal hotfix changes with it unless you can justify why they are required.**
+
+Determine how to accomplish that request from the repository history.
+
+You are deliberately not being told which Git feature to use.
+
+Inspect the result and verify that you brought in the intended change rather than an unrelated collection of commits.
+
+---
+
+# Mission 9 — Final Verification
+
+Before you declare the assessment complete, prove that:
 
 - the correct branch is checked out;
-- the working tree is clean, or any remaining changes are intentional;
-- the required policy change exists;
-- the relevant service-desk documentation is present;
-- the conflict is resolved;
-- the recovered work is present;
+- the working tree is clean, or remaining changes are intentional and explained;
+- the manager's P2 clarification exists;
+- priority is still based on business impact;
+- the incorrect requester-role shortcut is not part of the final policy;
+- the relevant customer-portal documentation is present;
+- the recovery work is present;
+- the requested portal incident ticket is present;
+- there are no unresolved conflict markers;
 - no accidental files or secrets were committed;
-- the history makes sense;
-- the remote relationship is understood;
-- your final commits describe the work clearly.
+- the history is understandable;
+- you understand the relationship between your local branch and the remote.
 
-You should be able to prove these statements with repository evidence.
+Use repository evidence to support your conclusions.
 
 ---
 
 # Final Explanation
 
-Explain, in plain language:
+Give the instructor a short explanation in your own words:
 
-1. What was the repository state when you started?
-2. What did you change?
-3. Why did you create your branch?
-4. What commits did you create?
-5. Which existing work did you integrate, and why?
-6. Did you encounter a conflict?
-7. How did you resolve it?
-8. What happened during the recovery test?
-9. How did you recover the work?
-10. What evidence proves the final state is correct?
-11. What does the remote represent?
-12. What would you do differently if you repeated the task?
+1. What did the repository look like when you started?
+2. Which branches did you investigate and why?
+3. Which work did you choose to integrate?
+4. Which work did you deliberately leave out, and why?
+5. What caused the conflict, if one occurred?
+6. How did you recover the apparently lost work?
+7. How did you bring in the requested portal incident ticket?
+8. What evidence proves that the final repository is correct?
 
----
-
-# Optional Advanced Challenge
-
-If the instructor assigns it, you will receive one additional request involving a **specific existing commit**.
-
-The requirement will be stated in business language rather than as a Git command.
-
-You must determine how to bring only the required change into your branch and then verify the resulting history.
-
----
-
-# Pass Standard
-
-The assessment is not a test of command memorisation.
-
-The important question is:
-
-> **Could you solve the problem?**
-
-You demonstrate mastery when you can investigate the repository, understand the requirement, choose appropriate Git operations, recover from mistakes and prove that the final state is correct without command-by-command instruction.
-
----
-
-# Final Reflection
-
-Complete these sentences:
-
-> Before this course, I thought Git was...
-
-> Now I understand Git as...
-
-> When I get stuck, my first step is...
-
-> When I make a mistake, I will...
-
-> When I do not know a command, I will...
-
-> The Git skill I am most confident about is...
-
-> The skill I still need to practise is...
+The assessment is complete only when you can explain the repository rather than merely show that commands were executed.

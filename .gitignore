@@ -1,47 +1,22 @@
-# ==============================
+# Generated assessment repositories
+assessment-repository/
+starter-remote.git/
+
+# Local Git/test artifacts
+.git/
+
 # OS files
-# ==============================
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# ==============================
-# Editor / IDE
-# ==============================
+# Editor files
 .vscode/
 .idea/
 
-# ==============================
-# Logs
-# ==============================
-*.log
-
-# ==============================
 # Temporary files
-# ==============================
 *.tmp
 *.temp
+*.log
 
-# ==============================
-# Environment / secrets
-# ==============================
-.env
-.env.*
-!.env.example
-
-# ==============================
-# Generated / extracted Git data
-# ==============================
-starter-remote.git/
-
-# ==============================
-# Temporary archives
-# ==============================
-*.zip
-*.tar
-*.tar.gz
-
-# ==============================
-# Generated learner workspace
-# ==============================
-assessment-repository/
+# PowerShell artifacts
+*.ps1.bak
